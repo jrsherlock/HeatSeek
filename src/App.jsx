@@ -935,7 +935,7 @@ const InteractiveDemo = () => {
   };
   
   return (
-    <div className="grid lg:grid-cols-2 gap-12 items-start">
+    <div className="flex flex-col lg:grid lg:grid-cols-2 gap-12 items-start">
       {/* Swipeable Cards */}
       <div className="space-y-6">
         <div className="text-center mb-6">
@@ -1211,6 +1211,7 @@ const FeatureCard = ({ icon: Icon, title, description, color = "yellow" }) => {
 // Main landing page component
 export default function HeatSeekLanding() {
   const [scrolled, setScrolled] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -1275,7 +1276,7 @@ export default function HeatSeekLanding() {
         }
       `}</style>
       {/* Navigation */}
-      <nav className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${scrolled ? 'bg-white shadow-sm border-b border-gray-200' : 'bg-white'}`}>
+      <nav className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${scrolled || isMenuOpen ? 'bg-white shadow-sm border-b border-gray-200' : 'bg-white'}`}>
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="w-10 h-10 rounded-lg bg-yellow-400 flex items-center justify-center">
@@ -1283,16 +1284,42 @@ export default function HeatSeekLanding() {
             </div>
             <span className="text-2xl font-bold text-black">HeatSeek</span>
           </div>
+          
+          {/* Desktop Nav */}
           <div className="hidden md:flex items-center gap-8">
             <a href="#features" className="text-gray-700 hover:text-black transition-colors font-medium">Features</a>
             <a href="#demo" className="text-gray-700 hover:text-black transition-colors font-medium">Demo</a>
             <a href="#how-it-works" className="text-gray-700 hover:text-black transition-colors font-medium">How It Works</a>
             <a href="#pricing" className="text-gray-700 hover:text-black transition-colors font-medium">Pricing</a>
           </div>
-          <button className="bg-yellow-400 text-black px-6 py-2.5 rounded-lg font-semibold hover:bg-yellow-500 transition-colors">
-            Get Early Access
-          </button>
+
+          <div className="flex items-center gap-4">
+            <button className="hidden sm:block bg-yellow-400 text-black px-6 py-2.5 rounded-lg font-semibold hover:bg-yellow-500 transition-colors">
+              Get Early Access
+            </button>
+            
+            {/* Mobile Menu Toggle */}
+            <button 
+              className="md:hidden p-2 text-gray-700 hover:text-black"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+            >
+              {isMenuOpen ? <X className="w-8 h-8" /> : <Radar className="w-8 h-8" />}
+            </button>
+          </div>
         </div>
+
+        {/* Mobile Nav Overlay */}
+        {isMenuOpen && (
+          <div className="md:hidden bg-white border-t border-gray-200 py-6 px-6 space-y-4 animate-fade-in absolute top-full left-0 w-full shadow-lg">
+            <a href="#features" onClick={() => setIsMenuOpen(false)} className="block text-xl font-bold text-black">Features</a>
+            <a href="#demo" onClick={() => setIsMenuOpen(false)} className="block text-xl font-bold text-black">Demo</a>
+            <a href="#how-it-works" onClick={() => setIsMenuOpen(false)} className="block text-xl font-bold text-black">How It Works</a>
+            <a href="#pricing" onClick={() => setIsMenuOpen(false)} className="block text-xl font-bold text-black">Pricing</a>
+            <button className="w-full bg-yellow-400 text-black py-4 rounded-lg font-bold text-lg mt-4">
+              Get Early Access
+            </button>
+          </div>
+        )}
       </nav>
       
       {/* Hero Section */}
@@ -1313,11 +1340,11 @@ export default function HeatSeekLanding() {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 mb-12">
-              <button className="bg-yellow-400 text-black px-8 py-4 rounded-lg font-semibold text-lg hover:bg-yellow-500 transition-colors flex items-center justify-center gap-2 group shadow-md">
+              <button className="w-full sm:w-auto bg-yellow-400 text-black px-8 py-4 rounded-lg font-semibold text-lg hover:bg-yellow-500 transition-colors flex items-center justify-center gap-2 group shadow-md">
                 Start Hunting
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </button>
-              <a href="#demo" className="border-2 border-gray-300 text-black px-8 py-4 rounded-lg font-semibold text-lg hover:border-gray-400 hover:bg-gray-50 transition-all flex items-center justify-center gap-2">
+              <a href="#demo" className="w-full sm:w-auto border-2 border-gray-300 text-black px-8 py-4 rounded-lg font-semibold text-lg hover:border-gray-400 hover:bg-gray-50 transition-all flex items-center justify-center gap-2">
                 Try Interactive Demo
               </a>
             </div>
@@ -1340,11 +1367,13 @@ export default function HeatSeekLanding() {
           </div>
           
           {/* Phone mockups */}
-          <div className="relative flex justify-center items-center py-12">
-            {/* Grid cards */}
-            <GridCard company="Target Corp" match={92} distance="0.3 mi" position={{ top: '5%', left: '5%' }} />
-            <GridCard company="Best Buy HQ" match={88} distance="0.5 mi" position={{ top: '15%', right: '0%' }} />
-            <GridCard company="US Bank" match={85} distance="0.4 mi" position={{ bottom: '20%', left: '0%' }} />
+          <div className="relative flex justify-center items-center py-12 lg:py-0">
+            {/* Grid cards - Hidden on smallest mobile, shown on SM+ */}
+            <div className="hidden sm:block">
+              <GridCard company="Target Corp" match={92} distance="0.3 mi" position={{ top: '5%', left: '5%' }} />
+              <GridCard company="Best Buy HQ" match={88} distance="0.5 mi" position={{ top: '15%', right: '0%' }} />
+              <GridCard company="US Bank" match={85} distance="0.4 mi" position={{ bottom: '20%', left: '0%' }} />
+            </div>
             
             <div className="relative z-10">
               <PhoneMockup />
@@ -1439,7 +1468,7 @@ export default function HeatSeekLanding() {
             </p>
           </div>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
             {/* HubSpot */}
             <div className="bg-white rounded-lg p-6 border-2 border-gray-200 hover:border-orange-500 hover:shadow-lg transition-all group">
               <div className="flex flex-col items-center text-center">
@@ -1506,14 +1535,14 @@ export default function HeatSeekLanding() {
             </p>
           </div>
           
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div className="space-y-8">
               {[
                 { step: '01', title: 'Define Your ICP', description: 'Set your ideal customer criteria: industry verticals, employee count, revenue range, tech stack requirements, and compliance needs. For cybersecurity? Think healthcare, finance, manufacturing.' },
                 { step: '02', title: 'Swipe & Sort', description: 'Browse through local matches like you\'re on Tinder, but for B2B. Swipe right on promising prospects, left on poor fits. Build your "hot list" of targets.' },
                 { step: '03', title: 'Lock On & Navigate', description: 'Select a target from your hot list and activate HeatSeek mode. We\'ll guide you through the Minneapolis Skywalk system directly to their building lobby.' },
               ].map((item, index) => (
-                <div key={index} className="flex gap-6">
+                <div key={index} className="flex flex-col sm:flex-row gap-6 text-center sm:text-left items-center sm:items-start">
                   <div className="flex-shrink-0 w-16 h-16 rounded-lg bg-yellow-400 flex items-center justify-center text-2xl font-bold text-black">
                     {item.step}
                   </div>
@@ -1564,7 +1593,7 @@ export default function HeatSeekLanding() {
                 9.5 miles of climate-controlled prospecting paradise. HeatSeek is optimized for the Minneapolis Skywalk system, connecting you to over 80 city blocks of potential customers without ever stepping outside.
               </p>
               
-              <div className="grid grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 {[
                   { stat: '80+', label: 'City Blocks Connected' },
                   { stat: '200+', label: 'Buildings in Network' },
@@ -1617,7 +1646,7 @@ export default function HeatSeekLanding() {
             </p>
           </div>
           
-          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto">
             {[
               {
                 name: 'Scout',
