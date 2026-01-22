@@ -1332,11 +1332,11 @@ export default function HeatSeekLanding() {
             </div>
             
             <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight text-black">
-              Never Make a Cold Call Again.
+              Never Make a <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-blue-400 to-cyan-500 drop-shadow-sm">Cold Call</span> Again.
             </h1>
             
             <p className="text-xl text-gray-700 mb-8 leading-relaxed">
-              <strong className="text-black">Double meaning:</strong> No more cold-calling prospects <em>and</em> you literally never have to step into the -20°F Minneapolis winter. Your outreach and your body stay warm. HeatSeek turns you into a <strong className="text-black">heat-seeking missile</strong> for your ideal customers—all through the climate-controlled Minneapolis Skywalk.
+              Find and navigate to your ideal B2B customers through the climate-controlled Minneapolis Skywalk system.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 mb-12">
